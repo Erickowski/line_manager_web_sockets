@@ -7,12 +7,30 @@ import {
   UserOutlined,
   VideoCameraOutlined,
 } from "@ant-design/icons";
-import { Layout as LayoutAntd, Menu, theme } from "antd";
+import { Layout as LayoutAntd, Menu, MenuProps, theme } from "antd";
 import Link from "next/link";
 
 const { Sider, Content } = LayoutAntd;
 
-export const Layout = ({ children }: { children?: ReactElement }) => {
+const items: MenuProps["items"] = [
+  {
+    label: <Link href="/login">Ingresar</Link>,
+    icon: <UserOutlined />,
+    key: "1",
+  },
+  {
+    label: <Link href="/line">Fila</Link>,
+    icon: <VideoCameraOutlined />,
+    key: "2",
+  },
+  {
+    label: <Link href="/create-ticket">Crear ticket</Link>,
+    icon: <UploadOutlined />,
+    key: "3",
+  },
+];
+
+export const Layout = ({ children }: { children: ReactElement }) => {
   const {
     token: { colorBgContainer, borderRadiusLG },
   } = theme.useToken();
@@ -21,17 +39,7 @@ export const Layout = ({ children }: { children?: ReactElement }) => {
     <LayoutAntd style={{ height: "100vh" }}>
       <Sider collapsedWidth="0" breakpoint="md">
         <div className="demo-logo-vertical" />
-        <Menu theme="dark" mode="inline">
-          <Menu.Item key="1" icon={<UserOutlined />}>
-            <Link href="/login">Ingresar</Link>
-          </Menu.Item>
-          <Menu.Item key="2" icon={<VideoCameraOutlined />}>
-            <Link href="/line">Fila</Link>
-          </Menu.Item>
-          <Menu.Item key="3" icon={<UploadOutlined />}>
-            <Link href="/create-ticket">Crear ticket</Link>
-          </Menu.Item>
-        </Menu>
+        <Menu theme="dark" mode="inline" items={items} />
       </Sider>
       <LayoutAntd>
         <Content

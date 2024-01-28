@@ -1,5 +1,5 @@
-import { Layout } from "@/components";
+import { redirect } from "next/navigation";
 
 export default function Home() {
-  return <Layout />;
+  redirect("/login");
 }
