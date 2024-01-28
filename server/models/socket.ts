@@ -22,6 +22,21 @@ export class Sockets {
           cb(newTicket);
         }
       );
+
+      socket.on(
+        "assign-ticket",
+        (
+          user: { username: string; desktop: string },
+          cb: (newTicket: typeof ITicket) => void
+        ) => {
+          const { username, desktop } = user;
+          const assignedTicket = this.ticketList.assignTicket(
+            username,
+            desktop
+          );
+          cb(assignedTicket);
+        }
+      );
     });
   }
 }

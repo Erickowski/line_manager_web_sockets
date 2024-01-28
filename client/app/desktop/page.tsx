@@ -1,16 +1,19 @@
 "use client";
-import { useMemo } from "react";
+import { useContext, useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
 
 import { CloseOutlined, RightOutlined } from "@ant-design/icons";
 import { Col, Row, Typography, Button, Divider } from "antd";
 
 import { getUserLocalStorage } from "@/utils";
-import { LOCAL_STORAGE_KEYS, PATHNAMES } from "@/types";
+import { ITicket, LOCAL_STORAGE_KEYS, PATHNAMES } from "@/types";
+import { SocketContext } from "@/context";
 
 const { Title, Text } = Typography;
 
 export default function Desktop() {
+  const { socket } = useContext(SocketContext);
+  const [ticket, setTicket] = useState<ITicket>();
   const router = useRouter();
   const user = useMemo(() => {
     return getUserLocalStorage();
@@ -23,7 +26,9 @@ export default function Desktop() {
   };
 
   const handleNextTicket = () => {
-    console.log("Siguiente ticket");
+    socket.emit("assign-ticket", user, (ticket: ITicket) => {
+      setTicket(ticket);
+    });
   };
 
   if (!user.username || !user.desktop) {
@@ -47,14 +52,16 @@ export default function Desktop() {
         </Col>
       </Row>
       <Divider />
-      <Row>
-        <Col>
-          <Text>Esta atendiendo el ticket número:</Text>
-          <Text style={{ fontSize: 30 }} type="danger">
-            55
-          </Text>
-        </Col>
-      </Row>
+      {ticket ? (
+        <Row>
+          <Col>
+            <Text>Esta atendiendo el ticket número:</Text>
+            <Text style={{ fontSize: 30 }} type="danger">
+              {ticket?.number}
+            </Text>
+          </Col>
+        </Row>
+      ) : null}
       <Row>
         <Col offset={18} span={6}>
           <Button onClick={handleNextTicket} shape="round" type="primary">
