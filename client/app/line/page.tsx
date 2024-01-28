@@ -1,69 +1,48 @@
 "use client";
+import { useContext, useEffect, useState } from "react";
 
 import { Card, Col, Divider, List, Row, Tag, Typography } from "antd";
 
+import { SocketContext } from "@/context";
+import { ITicket } from "@/types";
+
 const { Title, Text } = Typography;
 
-const data = [
-  {
-    ticketNo: 33,
-    escritorio: 3,
-    agente: "Fernando Herrera",
-  },
-  {
-    ticketNo: 34,
-    escritorio: 4,
-    agente: "Melissa Flores",
-  },
-  {
-    ticketNo: 35,
-    escritorio: 5,
-    agente: "Carlos Castro",
-  },
-  {
-    ticketNo: 36,
-    escritorio: 3,
-    agente: "Fernando Herrera",
-  },
-  {
-    ticketNo: 37,
-    escritorio: 3,
-    agente: "Fernando Herrera",
-  },
-  {
-    ticketNo: 38,
-    escritorio: 2,
-    agente: "Melissa Flores",
-  },
-  {
-    ticketNo: 39,
-    escritorio: 5,
-    agente: "Carlos Castro",
-  },
-];
-
 export default function Line() {
+  const { socket } = useContext(SocketContext);
+  const [tickets, setTickets] = useState<ITicket[]>([]);
+
+  useEffect(() => {
+    socket.on("new-ticket-assigned", (ticketsAssigned: ITicket[]) => {
+      setTickets(ticketsAssigned);
+    });
+
+    return () => {
+      socket.off("new-ticket-assigned");
+    };
+  }, [socket]);
+
   return (
     <>
       <Title level={1}>Atendiendo al cliente</Title>
       <Row>
         <Col span={12}>
           <List
-            dataSource={data.slice(0, 3)}
+            dataSource={tickets.slice(0, 3)}
             renderItem={(item) => (
               <List.Item>
                 <Card
                   style={{ width: 300, marginTop: 16 }}
                   actions={[
-                    <Tag color="volcano" key={`agent-${item.ticketNo}}`}>
-                      {item.agente}
+                    <Tag color="volcano" key={`agent-${item.id}}`}>
+                      {item.username}
                     </Tag>,
-                    <Tag color="magenta" key={`desktop-${item.ticketNo}}`}>
-                      Escritorio: {item.escritorio}
+                    <Tag color="magenta" key={`desktop-${item.id}}`}>
+                      Escritorio: {item.desktop}
                     </Tag>,
                   ]}
                 >
-                  <Title>No. {item.ticketNo}</Title>
+                  <Title>No. {item.number}</Title>
                 </Card>
               </List.Item>
             )}
@@ -72,17 +51,17 @@ export default function Line() {
         <Col span={12}>
           <Divider>Historial</Divider>
           <List
-            dataSource={data.slice(3)}
+            dataSource={tickets.slice(3)}
             renderItem={(item) => (
               <List.Item>
                 <List.Item.Meta
-                  title={`Ticket No. ${item.ticketNo}`}
+                  title={`Ticket No. ${item.number}`}
                   description={
                     <>
                       <Text type="secondary">En el escritorio</Text>
-                      <Tag color="magenta">{item.escritorio}</Tag>
+                      <Tag color="magenta">{item.desktop}</Tag>
                       <Text type="secondary">Agente:</Text>
-                      <Tag color="volcano">{item.agente}</Tag>
+                      <Tag color="volcano">{item.username}</Tag>
                     </>
                   }
                 />

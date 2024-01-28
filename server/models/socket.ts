@@ -35,6 +35,8 @@ export class Sockets {
             desktop
           );
           cb(assignedTicket);
+
+          this.io.emit("new-ticket-assigned", this.ticketList.getLastTickets);
         }
       );
     });
