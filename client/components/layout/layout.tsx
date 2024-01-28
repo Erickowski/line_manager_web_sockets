@@ -30,14 +30,19 @@ const items: MenuProps["items"] = [
   },
 ];
 
-export const Layout = ({ children }: { children: ReactElement }) => {
+interface ILayout {
+  children: ReactElement;
+  siderHidden?: boolean;
+}
+
+export const Layout = ({ children, siderHidden = false }: ILayout) => {
   const {
     token: { colorBgContainer, borderRadiusLG },
   } = theme.useToken();
 
   return (
     <LayoutAntd style={{ height: "100vh" }}>
-      <Sider collapsedWidth="0" breakpoint="md">
+      <Sider collapsedWidth="0" breakpoint="md" hidden={siderHidden}>
         <div className="demo-logo-vertical" />
         <Menu theme="dark" mode="inline" items={items} />
       </Sider>
