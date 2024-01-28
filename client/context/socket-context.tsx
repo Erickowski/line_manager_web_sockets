@@ -18,7 +18,9 @@ interface ISocketProvider {
 }
 
 export const SocketProvider = ({ children }: ISocketProvider) => {
-  const { socket, online } = useSocket(process.env.SOCKET_URL ?? "");
+  const { socket, online } = useSocket(
+    process.env.NEXT_PUBLIC_SOCKET_URL ?? ""
+  );
 
   return (
     <SocketContext.Provider value={{ socket, online }}>
