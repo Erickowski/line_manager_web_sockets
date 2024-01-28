@@ -1,6 +1,6 @@
 const { Ticket, ITicket } = require("./ticket");
 
-interface ITicketList {
+export interface ITicketList {
   lastNumber: number;
   pending: InstanceType<typeof ITicket>[];
   assigned: InstanceType<typeof ITicket>[];
@@ -31,7 +31,7 @@ export class TicketList implements ITicketList {
   }
 
   createTicket() {
-    const newTicket = new Ticket(this.lastNumber);
+    const newTicket = new Ticket(this.getNextNumber);
     this.pending.push(newTicket);
     return newTicket;
   }
