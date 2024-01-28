@@ -10,6 +10,7 @@ import {
 import { Layout as LayoutAntd, Menu, MenuProps, theme } from "antd";
 import Link from "next/link";
 
+import { SocketProvider } from "@/context";
 import { PATHNAMES } from "@/types";
 
 const { Sider, Content } = LayoutAntd;
@@ -43,24 +44,26 @@ export const Layout = ({ children, siderHidden = false }: ILayout) => {
   } = theme.useToken();
 
   return (
-    <LayoutAntd style={{ height: "100vh" }}>
-      <Sider collapsedWidth="0" breakpoint="md" hidden={siderHidden}>
-        <div className="demo-logo-vertical" />
-        <Menu theme="dark" mode="inline" items={items} />
-      </Sider>
-      <LayoutAntd>
-        <Content
-          style={{
-            margin: "24px 16px",
-            padding: 24,
-            minHeight: 280,
-            background: colorBgContainer,
-            borderRadius: borderRadiusLG,
-          }}
-        >
-          {children}
-        </Content>
+    <SocketProvider>
+      <LayoutAntd style={{ height: "100vh" }}>
+        <Sider collapsedWidth="0" breakpoint="md" hidden={siderHidden}>
+          <div className="demo-logo-vertical" />
+          <Menu theme="dark" mode="inline" items={items} />
+        </Sider>
+        <LayoutAntd>
+          <Content
+            style={{
+              margin: "24px 16px",
+              padding: 24,
+              minHeight: 280,
+              background: colorBgContainer,
+              borderRadius: borderRadiusLG,
+            }}
+          >
+            {children}
+          </Content>
+        </LayoutAntd>
       </LayoutAntd>
-    </LayoutAntd>
+    </SocketProvider>
   );
 };

@@ -9,6 +9,7 @@ export class Sockets {
 
   socketEvent() {
     this.io.on("connection", (socket) => {
+      console.log("Client connected");
       socket.on("message-to-server", (data) => {
         this.io.emit("message-from-server", data);
       });
