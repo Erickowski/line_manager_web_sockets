@@ -1,26 +1,42 @@
 "use client";
 
+import { useMemo } from "react";
+import { useRouter } from "next/navigation";
+
 import { SaveOutlined } from "@ant-design/icons";
 import { Button, Form, Input, InputNumber, Typography, Divider } from "antd";
 
+import { LOCAL_STORAGE_KEYS, PATHNAMES } from "@/types";
+import { getUserLocalStorage } from "@/utils";
+
 const { Title, Text } = Typography;
-import { useRouter } from "next/navigation";
 
 type FieldType = {
-  username?: string;
-  desktop?: string;
+  username: string;
+  desktop: string;
 };
 
 export default function Login() {
   const router = useRouter();
+  const user = useMemo(() => {
+    return getUserLocalStorage();
+  }, []);
 
-  const onFinish = () => {
-    router.push("/desktop", { scroll: false });
+  const onFinish = (values: FieldType) => {
+    localStorage.setItem(LOCAL_STORAGE_KEYS.username, values.username);
+    localStorage.setItem(LOCAL_STORAGE_KEYS.desktop, values.desktop);
+    router.push(PATHNAMES.desktop, { scroll: false });
   };
 
   const onFinishFailed = (errorInfo: any) => {
     console.log("Failed:", errorInfo);
   };
+
+  if (user.username && user.desktop) {
+    router.push(PATHNAMES.desktop, { scroll: false });
+    return null;
+  }
+
   return (
     <>
       <Title level={2}>Ingresar</Title>

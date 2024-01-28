@@ -10,21 +10,23 @@ import {
 import { Layout as LayoutAntd, Menu, MenuProps, theme } from "antd";
 import Link from "next/link";
 
+import { PATHNAMES } from "@/types";
+
 const { Sider, Content } = LayoutAntd;
 
 const items: MenuProps["items"] = [
   {
-    label: <Link href="/login">Ingresar</Link>,
+    label: <Link href={PATHNAMES.login}>Ingresar</Link>,
     icon: <UserOutlined />,
     key: "1",
   },
   {
-    label: <Link href="/line">Fila</Link>,
+    label: <Link href={PATHNAMES.line}>Fila</Link>,
     icon: <VideoCameraOutlined />,
     key: "2",
   },
   {
-    label: <Link href="/create-ticket">Crear ticket</Link>,
+    label: <Link href={PATHNAMES.createTicket}>Crear ticket</Link>,
     icon: <UploadOutlined />,
     key: "3",
   },
