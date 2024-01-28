@@ -27,7 +27,7 @@ export class TicketList implements ITicketList {
   }
 
   get getLastTickets() {
-    return this.pending.slice(0, 13);
+    return this.assigned.slice(0, 13);
   }
 
   createTicket() {
