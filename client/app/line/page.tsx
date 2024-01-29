@@ -5,12 +5,19 @@ import { Card, Col, Divider, List, Row, Tag, Typography } from "antd";
 
 import { SocketContext } from "@/context";
 import { ITicket } from "@/types";
+import { getLastTicketsAssigned, ILastTicketsAssigned } from "@/api";
 
 const { Title, Text } = Typography;
 
 export default function Line() {
   const { socket } = useContext(SocketContext);
   const [tickets, setTickets] = useState<ITicket[]>([]);
+
+  useEffect(() => {
+    getLastTicketsAssigned().then((data: ILastTicketsAssigned) => {
+      setTickets(data.lastTicketsAssigned);
+    });
+  }, []);
 
   useEffect(() => {
     socket.on("new-ticket-assigned", (ticketsAssigned: ITicket[]) => {
